@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { User } from "../models/user.model";
 import { validateUser } from "../validations/user";
+import { createUser as createUserService } from "../services/user.service";
 
 export const createUser = async (
   req: Request,
@@ -16,8 +16,12 @@ export const createUser = async (
     }
 
     const { name, email, age } = req.body;
-    const user = new User({ name, email, age });
-    const createdUser = await user.save();
+
+    const createdUser = await createUserService({
+      age,
+      email,
+      name,
+    });
 
     res
       .status(StatusCodes.CREATED)
